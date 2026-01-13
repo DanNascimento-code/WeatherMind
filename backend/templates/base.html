@@ -1,8 +1,14 @@
+
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}WeatherMind{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_css %}{% endblock %}
+
 </head>
 <body>
 
@@ -11,7 +17,7 @@
     <main>
         {% block content %}{% endblock %}
     </main>
-
+    <script src="{% static 'js/main.js' %}"></script> 
     {% block extra_js %}{% endblock %}
 </body>    
 </html>
