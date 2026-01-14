@@ -30,12 +30,32 @@ Dashboard | WeatherMind
 
     <section class="dashboard-section current-weather">
         <h3>Clima atual</h3>
-        <p>Dados climáticos indisponíveis</p>
+
+        {% if weather %}
+            <p>Temperatura: {{ weather.temperature }}°C</p>
+            <p>Sensação térmica: {{ weather.feels_like }}°C</p>
+            <p>Condição: {{ weather.description }}</p>
+        {% else %}
+            <p>Dados climáticos indisponíveis</p>
+        {% endif %}
     </section>
 
     <section class="dashboard-section forecast">
         <h3>Previsão</h3>
-        <p>Previsão ainda não carregada</p>
+
+        {% if forecast %}
+            <ul>
+                {% for day in forecast %}
+                    <li>
+                        {{ day.date }} —
+                        {{ day.avg_temp }}°C —
+                        {{ day.description }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Previsão ainda não carregada</p>
+        {% endif %}
     </section>
 
     <section class="dashboard-section insights">
