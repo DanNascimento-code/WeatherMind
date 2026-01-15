@@ -1,12 +1,20 @@
-
 {% extends "base.html" %}
 
-{% block title %}
-Home | WeatherMind
-{% endblock %}
-
-
 {% block content %}
-    <h2>Bem-vindo ao WeatherMind</h2>
-    <p>Sistema inteligente de visualização climática.</p>
-{% endblock %}    
+<form method="get">
+    <input type="text" name="city" placeholder="Cidade" required>
+    <button type="submit">Buscar</button>
+</form>
+
+{% if weather %}
+    <h2>{{ weather.city }}</h2>
+    <p>Temperatura: {{ weather.temperature }}°C</p>
+    <p>Sensação térmica: {{ weather.feels_like }}°C</p>
+    <p>Umidade: {{ weather.humidity }}%</p>
+    <p>Condição: {{ weather.description }}</p>
+{% endif %}
+
+{% if error %}
+    <p style="color:red">{{ error }}</p>
+{% endif %}
+{% endblock %} 
