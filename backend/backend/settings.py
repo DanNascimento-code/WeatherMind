@@ -135,3 +135,13 @@ STATICFILES_DIRS = [
 
 # API KEYS
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
+
+# Caches settings
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "weathermind-cache",
+        "TIMEOUT": None,
+    }
+}

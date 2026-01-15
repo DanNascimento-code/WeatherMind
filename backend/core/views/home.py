@@ -1,23 +1,28 @@
 from django.shortcuts import render
-from core.services.weather_service import WeatherService, WeatherServiceError
+
+from core.services.climate_service import ClimateService
+from core.exceptions.climate import ClimateServiceError
 
 
 def home(request):
-    weather = None
-    error = None
+    city = request.GET.get("city")
+    weather_data = None
+    error_message = None
 
-    if "city" in request.GET:
-        city = request.GET.get("city")
-        service = WeatherService()
+    if city:
+        service = ClimateService()
 
         try:
-            weather = service.get_current_weather(city)
-        except WeatherServiceError as e:
-            error = str(e)
+            weather_data = service.get_weather_by_city(city)
+        except ClimateServiceError as error:
+            error_message = str(error)
 
-    return render(request, "core/home.html", {
-        "weather": weather,
-        "error": error,
-    })
+    context = {
+        "weather": weather_data,
+        "error": error_message,
+    }
+
+    return render(request, "core/home.html", context)
+
 
 
