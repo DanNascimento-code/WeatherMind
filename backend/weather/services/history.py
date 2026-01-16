@@ -1,7 +1,8 @@
 
 from weather.models import WeatherRecord
 
-def get_city_history(city, limit=7):
+def get_city_history(city, limit=5):
     return WeatherRecord.objects.filter(
-        city__iexact=city
+        city=city.strip().lower()
     ).order_by("-created_at")[:limit]
+

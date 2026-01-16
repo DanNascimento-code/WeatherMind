@@ -17,7 +17,7 @@ def get_weather_by_city(city):
     data = response.json()
 
     return {
-        "city": data["name"],
+        "city": data["name"].strip().lower(),
         "country": data["sys"]["country"],
         "temperature": data["main"]["temp"],
         "feels_like": data["main"]["feels_like"],
@@ -26,7 +26,9 @@ def get_weather_by_city(city):
     }
 
 
+
 def save_weather_record(data):
+    
     WeatherRecord.objects.create(
         city=data["city"],
         country=data["country"],
@@ -38,7 +40,9 @@ def save_weather_record(data):
 
 
 def fetch_weather(city):
+  
     weather_data = get_weather_by_city(city)
     save_weather_record(weather_data)
+
     return weather_data
 

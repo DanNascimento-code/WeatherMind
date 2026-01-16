@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'locations.apps.LocationsConfig',
     'weather.apps.WeatherConfig',
+    'insights.apps.InsightsConfig',
 ]
 
 MIDDLEWARE = [
@@ -88,7 +89,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR.parent / 'db.sqlite3',
     }
 }
 

@@ -14,7 +14,20 @@
     <p>Condição: {{ weather.condition }}</p>
 {% endif %}
 
+{% if history %}
+    <h3>Histórico recente</h3>
+    <ul>
+        {% for record in history %}
+            <li>
+                {{ record.created_at|date:"d/m H:i" }} —
+                {{ record.temperature }}°C —
+                {{ record.condition }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
 {% if error %}
     <p style="color:red">{{ error }}</p>
 {% endif %}
-{% endblock %} 
+{% endblock %}
