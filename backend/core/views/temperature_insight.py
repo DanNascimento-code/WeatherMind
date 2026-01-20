@@ -2,31 +2,42 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+from weather.services.weather_service import (
+    fetch_weather,
+    get_recent_temperatures_for_city,
+)
+from weather.services.insights.temperature_insight import (
+    build_temperature_insight,
+)
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def temperature_insight_view(request):
-    """
-    Analisa a variação de temperatura ao longo do tempo.
-    Neste passo, os dados ainda são simulados.
-    """
+    city = request.query_params.get("city")
 
-    # Simulação de dados históricos (ex: últimas horas ou dias)
-    temperatures = [22, 23, 25, 28, 27, 26]
+    if not city:
+        return Response(
+            {"error": "Parâmetro 'city' é obrigatório"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
-    delta = temperatures[-1] - temperatures[0]
+    # Garante dado atualizado e persistido
+    fetch_weather(city)
 
-    if delta > 2:
-        trend = "subiu"
-    elif delta < -2:
-        trend = "caiu"
-    else:
-        trend = "estável"
+    temperatures = get_recent_temperatures_for_city(city)
 
-    insight = {
-        "trend": trend,
-        "variation": delta,
-        "data_points": len(temperatures),
-    }
+    if len(temperatures) < 2:
+        return Response(
+            {"error": "Dados insuficientes para análise de tendência"},
+            status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
 
-    return Response(insight, status=status.HTTP_200_OK)
+    insight = build_temperature_insight(temperatures)
 
+    return Response(
+        {
+            "city": city,
+            **insight,
+        },
+        status=status.HTTP_200_OK,
+    )

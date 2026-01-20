@@ -2,6 +2,9 @@
 import requests
 from django.conf import settings
 from weather.models import WeatherRecord
+from typing import List
+from django.utils import timezone
+from datetime import timedelta
 
 
 def get_weather_by_city(city):
@@ -45,4 +48,25 @@ def fetch_weather(city):
     save_weather_record(weather_data)
 
     return weather_data
+
+
+
+def get_recent_temperatures_for_city(
+    city: str,
+    hours: int = 24,
+) -> List[float]:
+    """
+    Retorna temperaturas registradas nas últimas X horas.
+    """
+
+    since = timezone.now() - timedelta(hours=hours)
+
+    records = (
+        WeatherRecord.objects
+        .filter(city=city.strip().lower(), created_at__gte=since)
+        .order_by("created_at")
+    )
+
+    return [record.temperature for record in records]
+
 
