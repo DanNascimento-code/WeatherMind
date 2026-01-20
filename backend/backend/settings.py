@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'locations.apps.LocationsConfig',
     'weather.apps.WeatherConfig',
     'insights.apps.InsightsConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
