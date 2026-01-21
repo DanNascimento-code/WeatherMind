@@ -1,6 +1,5 @@
 from typing import List, Dict
-from core.views import temperature_insight_view
-    
+
 
 def analyze_temperature(temperatures: List[float]) -> Dict[str, str]:
     if not temperatures or len(temperatures) < 2:
