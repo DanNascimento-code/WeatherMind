@@ -1,30 +1,84 @@
-from django.http import JsonResponse
-from django.views.decorators.http import require_GET
+"""
+Temperature Insight API View Module
 
-from weather.services.insights import build_temperature_insight
-from weather.services.history import get_city_history
+This module provides REST API endpoints for retrieving and analyzing temperature data for cities.
+It integrates historical temperature records with insight generation to provide meaningful analysis.
+
+Key Features:
+    - Fetches historical temperature data for specified cities
+    - Generates temperature insights based on historical trends
+    - Returns comprehensive JSON responses with city and insight information
+    - Implements proper HTTP error handling and validation
+    - Restricted to GET requests only
+
+Views:
+    temperature_insight_view: GET endpoint for retrieving temperature insights
+
+Example:
+    GET /api/v1/insights/temperature/?city=São%20Paulo
+    Returns: {"city": "São Paulo", "insight": {...temperature analysis...}}
+"""
+
+from django.http import JsonResponse  # HTTP response handler for JSON payloads
+from django.views.decorators.http import require_GET  # Decorator to restrict HTTP methods to GET
+
+from weather.services.insights.temperature_insight import build_temperature_insight  # Service to generate insight analysis
+from weather.services.history import get_city_history  # Service to retrieve historical temperature data
 
 
+# HTTP method restriction: only GET requests are allowed for this view
 @require_GET
 def temperature_insight_view(request):
     """
-    Provides temperature insights for a given city based on historical weather data.
+    API endpoint for retrieving temperature insights for a city.
 
-    This view fetches recent temperature records for the specified city,
-    generates a detailed analysis, and returns it as a JSON response.
+    This view processes GET requests to analyze temperature trends for a specified city.
+    It retrieves historical temperature data, generates insights, and returns a comprehensive
+    JSON response with the city information and insight analysis.
+
+    Args:
+        request (HttpRequest): Django request object containing query parameters
+
+    Query Parameters:
+        city (str, required): The name of the city to get temperature insights for
+
+    Returns:
+        JsonResponse: JSON response containing:
+            - Success (200): {"city": str, "insight": dict}
+            - Bad Request (400): {"error": str} - missing city parameter
+            - Not Found (404): {"error": str} - no historical data for city
+            - Server Error (500): {"error": str} - unexpected error during processing
+
+    Example:
+        GET /api/temperature-insight/?city=London
+        Response: {
+            "city": "London",
+            "insight": {
+                "average_temp": 15.2,
+                "max_temp": 22.5,
+                "min_temp": 8.1,
+                ...
+            }
+        }
     """
+    # Extract city name from query parameters
     city = request.GET.get("city")
 
+    # Validate that city parameter is provided
     if not city:
+        # Return 400 Bad Request if city is missing
         return JsonResponse(
             {"error": "Parâmetro 'city' é obrigatório."},
             status=400,
         )
 
     try:
-        # Fetch temperature history from the database
+        # Fetch the 10 most recent temperature records for the specified city
         history_records = get_city_history(city, limit=10)
+        
+        # Check if historical data exists for the city
         if not history_records:
+            # Return 404 Not Found if no data is available
             return JsonResponse(
                 {
                     "error": f"Não há dados históricos de temperatura para a cidade de '{city}'.",
@@ -32,12 +86,13 @@ def temperature_insight_view(request):
                 status=404,
             )
 
-        # Extract temperature values from records
+        # Extract temperature values from the history records for analysis
         temperatures = [record.temperature for record in history_records]
 
-        # Build the temperature insight
+        # Generate insight analysis based on temperature trends
         insight = build_temperature_insight(temperatures)
 
+        # Return successful response with city and insight information
         return JsonResponse(
             {
                 "city": city,
@@ -47,8 +102,11 @@ def temperature_insight_view(request):
         )
 
     except Exception as exc:
-        # Log the exception details for debugging purposes
+        # Catch any unexpected errors during processing
+        # TODO: Uncomment logger when logging is configured
         # logger.error(f"Error generating temperature insight for {city}: {exc}")
+        
+        # Return 500 Internal Server Error for unexpected exceptions
         return JsonResponse(
             {"error": "Ocorreu um erro inesperado ao gerar a análise de temperatura."},
             status=500,
