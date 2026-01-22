@@ -19,7 +19,8 @@ Example:
     Returns: {"city": "São Paulo", "insight": {...temperature analysis...}}
 """
 
-from django.http import JsonResponse  # HTTP response handler for JSON payloads
+import json
+from django.http import HttpResponse  # HTTP response handler for JSON payloads
 from django.views.decorators.http import require_GET  # Decorator to restrict HTTP methods to GET
 
 from weather.services.insights.temperature_insight import build_temperature_insight  # Service to generate insight analysis
@@ -67,9 +68,10 @@ def temperature_insight_view(request):
     # Validate that city parameter is provided
     if not city:
         # Return 400 Bad Request if city is missing
-        return JsonResponse(
-            {"error": "Parâmetro 'city' é obrigatório."},
+        return HttpResponse(
+            json.dumps({"error": "Parâmetro 'city' é obrigatório."}, ensure_ascii=False),
             status=400,
+            content_type="application/json",
         )
 
     try:
@@ -79,11 +81,13 @@ def temperature_insight_view(request):
         # Check if historical data exists for the city
         if not history_records:
             # Return 404 Not Found if no data is available
-            return JsonResponse(
-                {
-                    "error": f"Não há dados históricos de temperatura para a cidade de '{city}'.",
-                },
+            return HttpResponse(
+                json.dumps(
+                    {"error": f"Não há dados históricos de temperatura para a cidade de '{city}'."},
+                    ensure_ascii=False,
+                ),
                 status=404,
+                content_type="application/json",
             )
 
         # Extract temperature values from the history records for analysis
@@ -92,13 +96,20 @@ def temperature_insight_view(request):
         # Generate insight analysis based on temperature trends
         insight = build_temperature_insight(temperatures)
 
+        # Get the actual city name from the database record for consistency
+        actual_city = history_records[0].city
+
         # Return successful response with city and insight information
-        return JsonResponse(
-            {
-                "city": city,
-                "insight": insight,
-            },
+        return HttpResponse(
+            json.dumps(
+                {
+                    "city": actual_city,
+                    "insight": insight,
+                },
+                ensure_ascii=False,
+            ),
             status=200,
+            content_type="application/json",
         )
 
     except Exception as exc:
@@ -107,7 +118,11 @@ def temperature_insight_view(request):
         # logger.error(f"Error generating temperature insight for {city}: {exc}")
         
         # Return 500 Internal Server Error for unexpected exceptions
-        return JsonResponse(
-            {"error": "Ocorreu um erro inesperado ao gerar a análise de temperatura."},
+        return HttpResponse(
+            json.dumps(
+                {"error": "Ocorreu um erro inesperado ao gerar a análise de temperatura."},
+                ensure_ascii=False,
+            ),
             status=500,
+            content_type="application/json",
         )
