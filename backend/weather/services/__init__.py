@@ -12,7 +12,7 @@ def get_forecast_for_location(*, location):
     data = client.get_forecast(
         lat=location.latitude,
         lon=location.longitude,
-        api_key=settings.WEATHER_API_KEY,
+        api_key=settings.OPENWEATHER_API_KEY,
     )
 
     grouped_by_day = defaultdict(list)
@@ -44,7 +44,7 @@ def get_current_weather_for_location(*, location):
     data = client.get_current_weather(
         lat=location.latitude,
         lon=location.longitude,
-        api_key=settings.WEATHER_API_KEY,
+        api_key=settings.OPENWEATHER_API_KEY,
     )
 
     return {

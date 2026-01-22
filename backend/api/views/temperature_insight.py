@@ -92,6 +92,11 @@ def temperature_insight_view(request):
 
         # Extract temperature values from the history records for analysis
         temperatures = [record.temperature for record in history_records]
+        
+        # Reverse the temperatures list to ensure chronological order (oldest to newest)
+        # get_city_history returns records ordered newest-first, but trend analysis requires
+        # oldest-to-newest ordering to correctly calculate temperature trends
+        temperatures.reverse()
 
         # Generate insight analysis based on temperature trends
         insight = build_temperature_insight(temperatures)
