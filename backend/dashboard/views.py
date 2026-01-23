@@ -26,10 +26,11 @@ Example:
 from django.shortcuts import render  # Django shortcut function to render templates with context
 
 from locations.selectors import get_default_location  # Selector function to retrieve the user's default location
-from weather.services import (  # Weather service functions for data retrieval
+from weather.services.weather import (  # Weather service functions for data retrieval
     get_current_weather_for_location,  # Fetches current weather conditions for a location
     get_forecast_for_location,  # Fetches weather forecast for a location
 )
+from core.insights.comfort import thermal_comfort_insight  # Generates comfort-based insights from weather data
 
 
 def index(request):
@@ -63,6 +64,7 @@ def index(request):
     location = None  # User's default location object
     weather = None  # Current weather conditions
     forecast = []  # Weather forecast data
+    insights = None  # Personalized insights based on weather
     error = None  # Error message for template display
 
     try:
@@ -117,16 +119,26 @@ def index(request):
             if not error:
                 error = "Unable to fetch forecast data. Please try again later."
 
+        # Attempt to generate personalized insights based on current weather
+        try:
+            if weather:
+                insights = thermal_comfort_insight(weather)
+        except Exception as insights_error:
+            # Log the insights generation error (optional - uncomment if logger is configured)
+            # logger.error(f"Error generating insights: {str(insights_error)}")
+            pass  # Continue without insights if generation fails
+
     except Exception as e:
         # Catch any unexpected errors during location retrieval or processing
         # logger.error(f"Unexpected error in dashboard view: {str(e)}")
         error = "An unexpected error occurred. Please try refreshing the page."
 
-    # Prepare context dictionary with location, weather data, and any error messages
+    # Prepare context dictionary with location, weather data, insights, and any error messages
     context = {
         "location": location,  # Location object or None
         "weather": weather,  # Current weather conditions or None
         "forecast": forecast,  # Forecast data list (empty if unavailable)
+        "insights": insights,  # Personalized insights or None
         "error": error,  # Error message or None if no errors
     }
 

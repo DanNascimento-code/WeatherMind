@@ -60,7 +60,23 @@ Dashboard | WeatherMind
 
     <section class="dashboard-section insights">
         <h3>Insights personalizados</h3>
-        <p>Em breve</p>
+
+        {% if insights %}
+            <div class="insight-level insight-{{ insights.level }}">
+                <p><strong>Nível de conforto:</strong> {{ insights.level }}</p>
+                <p>{{ insights.summary }}</p>
+                {% if insights.factors %}
+                    <p><strong>Fatores considerados:</strong></p>
+                    <ul>
+                        {% for factor in insights.factors %}
+                            <li>{{ factor }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>Insights ainda não disponíveis</p>
+        {% endif %}
     </section>
 
 </section>
