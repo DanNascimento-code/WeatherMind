@@ -1,0 +1,82 @@
+:root {
+    /* Background layers */
+    --bg-main: #0b0f14;
+    --bg-surface: #121821;
+    --bg-elevated: #1a2230;
+
+    /* Text */
+    --text-primary: #e6eaf0;
+    --text-secondary: #9aa4b2;
+    --text-muted: #6b7280;
+
+    /* Accents */
+    --accent-cold: #4fc3f7;
+    --accent-hot: #ffb74d;
+    --accent-success: #4ade80;
+
+    /* UI */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+/* Base document */
+html, body {
+    height: 100%;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Main content area */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+}
+
+/* Dark surfaces (cards, sections) */
+.surface {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem;
+}
+
+/* Text helpers */
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* Inputs */
+input[type="text"],
+input[type="search"] {
+    width: 100%;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+}
+
+input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Buttons */
+.btn-accent {
+    background-color: var(--accent-cold);
+    color: #0b0f14;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-accent:hover {
+    opacity: 0.9;
+}
