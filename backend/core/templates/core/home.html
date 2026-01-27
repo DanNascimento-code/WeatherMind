@@ -80,13 +80,18 @@
 <!-- ========================= -->
 {% if history %}
 <section class="page-section">
+
     <div class="page-section-header">
-        <div class="page-section-title">
-            Histórico de temperatura
+        <div>
+            <div class="page-section-title">
+                Histórico de temperatura
+            </div>
+            <div class="page-section-subtitle">
+                Variação recente ao longo do tempo
+            </div>
         </div>
-        <div class="page-section-subtitle">
-            Variação recente de temperatura ao longo do tempo
-        </div>
+
+        <div class="weather-status-badge" id="weatherStatus"></div>
     </div>
 
     <div class="history-list">
@@ -101,18 +106,12 @@
         </ul>
     </div>
 
-    <div class="chart-container">
-        <div class="chart-header">
-            <div class="chart-title">
-                Temperatura ao longo do tempo
-            </div>
-            <div class="chart-subtitle">
-                Registros climáticos armazenados
-            </div>
-        </div>
-
+    <div class="chart-container" data-loading="true">
+        <div class="chart-skeleton"></div>
         <canvas id="temperatureChart"></canvas>
     </div>
+
+    
 </section>
 {% endif %}
 
@@ -138,6 +137,22 @@
         }
         return 'rgba(52, 211, 153, 0.9)'; // comfortable - green
     }
+
+    function statusFromTemperatures(values) {
+        const avg =
+            values.reduce((a, b) => a + b, 0) / values.length;
+
+        if (avg < COMFORT_MIN) {
+            return { label: 'Frio', color: 'rgba(56,189,248,0.9)' };
+        }
+
+        if (avg > COMFORT_MAX) {
+            return { label: 'Quente', color: 'rgba(251,146,60,0.9)' };
+        }
+
+        return { label: 'Confortável', color: 'rgba(52,211,153,0.9)' };
+    }
+    
 
     if (labels.length && temperatures.length) {
     const ctx = document.getElementById('temperatureChart');
@@ -220,6 +235,21 @@
                 }
             }
         });
+
+        // remove skeleton
+            document
+                .querySelector('.chart-container')
+                ?.setAttribute('data-loading', 'false');
+
+            // status badge
+            const status = statusFromTemperatures(temperatures);
+            const badge = document.getElementById('weatherStatus');
+
+            if (badge) {
+                badge.textContent = status.label;
+                badge.style.background = status.color;
+                badge.style.color = '#0f172a';
+            }    
         }
     }
 </script>
