@@ -34,6 +34,21 @@ main {
     padding: 2.5rem 1.5rem;
 }
 
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+}
+
+
 /* Dark surfaces (cards, sections) */
 .surface {
     background-color: var(--bg-surface);
@@ -80,3 +95,75 @@ input::placeholder {
 .btn-accent:hover {
     opacity: 0.9;
 }
+
+.page-section {
+    margin-bottom: 2.5rem;
+}
+
+.page-section-header {
+    margin-bottom: 1.25rem;
+}
+
+.page-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.page-section-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem;
+}
+
+.card + .card {
+    margin-top: 1.5rem;
+}
+
+.card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.card-value {
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.chart-container {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 1.5rem;
+
+    height: 360px;             
+    max-height: 360px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-header {
+    margin-bottom: 1rem;
+}
+
+.chart-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.chart-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+

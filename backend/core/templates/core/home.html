@@ -1,43 +1,124 @@
 {% extends "base.html" %}
 
+{% block title %}WeatherMind — Clima{% endblock %}
+
 {% block content %}
-<form method="get">
-    <input type="text" name="city" placeholder="Cidade" required>
-    <button type="submit">Buscar</button>
-</form>
 
+<!-- ========================= -->
+<!-- Search / Hero Section -->
+<!-- ========================= -->
+<section class="page-section">
+    <div class="page-section-header">
+        <div class="page-section-title">
+            Consultar clima
+        </div>
+        <div class="page-section-subtitle">
+            Busque uma cidade para visualizar dados climáticos atuais e históricos
+        </div>
+    </div>
 
+    <div class="card">
+        <form method="get">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="Digite o nome da cidade"
+                    required
+                >
+                <button type="submit" class="btn-accent">
+                    Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- ========================= -->
+<!-- Current Weather Section -->
+<!-- ========================= -->
 {% if weather %}
-    <h2>{{ weather.city }}</h2>
-    <p>Temperatura: {{ weather.temperature }}°C</p>
-    <p>Sensação térmica: {{ weather.feels_like }}°C</p>
-    <p>Umidade: {{ weather.humidity }}%</p>
-    <p>Condição: {{ weather.condition }}</p>
+<section class="page-section">
+    <div class="page-section-header">
+        <div class="page-section-title">
+            Condições atuais
+        </div>
+        <div class="page-section-subtitle">
+            Dados mais recentes para {{ weather.city }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; gap: 2rem; align-items: center;">
+            <div>
+                <div class="card-title">
+                    {{ weather.city }}
+                </div>
+                <div class="card-value">
+                    {{ weather.temperature }}°C
+                </div>
+                <div class="text-secondary">
+                    Sensação térmica: {{ weather.feels_like }}°C
+                </div>
+                <div class="text-secondary">
+                    Umidade: {{ weather.humidity }}%
+                </div>
+            </div>
+
+            {% if weather.condition %}
+            <div class="text-secondary">
+                {{ weather.condition }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
 {% endif %}
 
+<!-- ========================= -->
+<!-- Historical Chart Section -->
+<!-- ========================= -->
 {% if history %}
-    <h3>Histórico recente</h3>
-    <ul>
-        {% for record in history %}
-            <li>
-                {{ record.created_at|date:"d/m H:i" }} —
-                {{ record.temperature }}°C —
-                {{ record.condition }}
-            </li>
-        {% endfor %}
-    </ul>
-    <div class="weather-chart-container">
-        <h3>Temperatura ao Longo do Tempo</h3>
-    </div>    
-    {% endif %}
+<section class="page-section">
+    <div class="page-section-header">
+        <div class="page-section-title">
+            Histórico de temperatura
+        </div>
+        <div class="page-section-subtitle">
+            Variação recente de temperatura ao longo do tempo
+        </div>
+    </div>
 
+    <div class="history-list">
+        <ul>
+            {% for record in history %}
+                <li>
+                    <strong>{{ record.created_at|date:"d/m H:i" }}</strong>
+                    — {{ record.temperature }}°C
+                    — {{ record.condition }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="chart-container">
+        <div class="chart-header">
+            <div class="chart-title">
+                Temperatura ao longo do tempo
+            </div>
+            <div class="chart-subtitle">
+                Registros climáticos armazenados
+            </div>
+        </div>
+
+        <canvas id="temperatureChart"></canvas>
+    </div>
+</section>
+{% endif %}
 
 {% endblock %}
 
 {% block extra_js %}
-<div>
-    <canvas id="temperatureChart"></canvas>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -60,10 +141,12 @@
                     }]
                 },
                 options: {
-                    responsive: true
+                    responsive: true,
+                    maintainAspectRatio: false
                 }
             });
         }
     }
 </script>
+
 {% endblock %}

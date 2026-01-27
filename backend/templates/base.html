@@ -1,4 +1,3 @@
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -7,18 +6,30 @@
     <meta charset="UTF-8">
     <title>{% block title %}WeatherMind{% endblock %}</title>
 
+    <!-- Global dark theme -->
     <link rel="stylesheet" href="{% static 'core/css/theme.css' %}">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-    {% include "includes/header.html" %}
+    <!-- App shell -->
+    <div class="app-shell">
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+        <!-- Header / Navbar -->
+        {% include "includes/header.html" %}
 
+        <!-- Main content -->
+        <main class="app-main">
+            {% block content %}{% endblock %}
+        </main>
+
+    </div>
+
+    <!-- Global JS -->
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
+
 </body>
 </html>
+
