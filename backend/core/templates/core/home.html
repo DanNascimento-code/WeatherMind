@@ -126,25 +126,100 @@
     const labels = JSON.parse('{{ labels|safe }}');
     const temperatures = JSON.parse('{{ temperatures|safe }}');
 
-    if (labels.length && temperatures.length) {
-        const ctx = document.getElementById('temperatureChart');
+    const COMFORT_MIN = 18;
+    const COMFORT_MAX = 26;
 
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Temperatura (°C)',
-                        data: temperatures,
-                        tension: 0.3
-                    }]
+    function temperatureColor(value) {
+        if (value < COMFORT_MIN) {
+            return 'rgba(56, 189, 248, 0.9)'; // cold - blue
+        }
+        if (value > COMFORT_MAX) {
+            return 'rgba(251, 146, 60, 0.9)'; // hot - amber
+        }
+        return 'rgba(52, 211, 153, 0.9)'; // comfortable - green
+    }
+
+    if (labels.length && temperatures.length) {
+    const ctx = document.getElementById('temperatureChart');
+
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Temperatura (°C)',
+                    data: temperatures,
+
+                    fill: true,
+                    tension: 0.35,
+
+                    borderWidth: 2,
+
+                    /* Color each POINT based on temperature */
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: temperatures.map(t =>
+                        temperatureColor(t)
+                    ),
+
+                    /* Color each LINE SEGMENT based on temperature */
+                    segment: {
+                        borderColor: ctx => {
+                            const value = ctx.p1.parsed.y;
+                            return temperatureColor(value);
+                        }
+                    },
+
+                    /* Neutral fill so the line colors stand out */
+                    backgroundColor: 'rgba(56, 189, 248, 0.12)',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#e5e7eb',
+                        bodyColor: '#e5e7eb',
+                        borderColor: 'rgba(56, 189, 248, 0.4)',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
+                        callbacks: {
+                            label: ctx => ` ${ctx.parsed.y}°C`
+                        }
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
+
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#9ca3af'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.08)',
+                            drawBorder: false
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#9ca3af',
+                            callback: value => `${value}°`
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.08)',
+                            drawBorder: false
+                        }
+                    }
                 }
-            });
+            }
+        });
         }
     }
 </script>
