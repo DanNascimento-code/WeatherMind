@@ -95,13 +95,20 @@
     </div>
 
     <div class="history-list">
-        <ul>
-            {% for record in history %}
-                <li>
-                    <strong>{{ record.created_at|date:"d/m H:i" }}</strong>
-                    — {{ record.temperature }}°C
-                    — {{ record.condition }}
-                </li>
+        {% for record in history %}
+            <div class="history-item">
+                <div class="history-time">
+                    {{ record.created_at|date:"d/m H:i" }}
+                </div>
+
+                <div class="history-temp">
+                    {{ record.temperature }}°C
+                </div>
+
+                <div class="history-condition">
+                    {{ record.condition }}
+                </div>
+            </div>
             {% endfor %}
         </ul>
     </div>
