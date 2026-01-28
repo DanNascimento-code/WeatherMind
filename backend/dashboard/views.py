@@ -33,6 +33,8 @@ from weather.services.weather import (  # Weather service functions for data ret
 from core.insights.comfort import thermal_comfort_insight  # Generates comfort-based insights from weather data
 
 
+
+
 def index(request):
     """
     Render the main weather dashboard with current conditions and forecast.
@@ -123,6 +125,17 @@ def index(request):
         try:
             if weather:
                 insights = thermal_comfort_insight(weather)
+
+                INSIGHT_UI_LEVEL_MAP = {
+                    "unknown": "neutral",
+                    "moderate": "good",
+                    "low": "bad",
+                }
+
+                raw_level = insights.get("level", "unknown")
+                insights["ui_level"] = INSIGHT_UI_LEVEL_MAP.get(raw_level, "neutral")
+        
+               
         except Exception as insights_error:
             # Log the insights generation error (optional - uncomment if logger is configured)
             # logger.error(f"Error generating insights: {str(insights_error)}")

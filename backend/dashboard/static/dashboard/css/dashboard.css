@@ -1,24 +1,145 @@
-.dashboard-title {
-    color: #0f766e;
-}
+/* =========================================================
+   Dashboard scope
+   ========================================================= */
 
 .dashboard {
+    /* Theme tokens (scoped to dashboard) */
+    --dashboard-gap: 1.5rem;
+
+    --card-radius: 0.75rem;
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-bg-soft: rgba(255, 255, 255, 0.04);
+
+    --section-border: rgba(255, 255, 255, 0.12);
+
+    /* Layout */
     display: grid;
-    gap: 1.5rem;
+    gap: var(--dashboard-gap);
+
+    /* Typography */
+    color: var(--bs-body-color-emphasis);
 }
 
+
+/* =========================================================
+   Header
+   ========================================================= */
+
 .dashboard-header {
-    border-bottom: 1px solid #e5e7eb;
     padding-bottom: 1rem;
+    border-bottom: 1px solid var(--section-border);
 }
+
+.dashboard-title {
+    color: #0f766e;
+    font-weight: 600;
+}
+
+.dashboard-header h2 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.dashboard-header p {
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    color: var(--bs-secondary-color);
+}
+
+
+/* =========================================================
+   Sections
+   ========================================================= */
 
 .dashboard-section {
     padding: 1rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+    border: 1px solid var(--section-border);
+    border-radius: 0.5rem;
+    background-color: transparent;
 }
 
 .dashboard-section h3 {
     margin-top: 0;
+    font-size: 1rem;
+    font-weight: 600;
 }
- 
+
+
+/* =========================================================
+   Cards
+   ========================================================= */
+
+.dashboard .card {
+    border-radius: var(--card-radius);
+    border: 1px solid var(--card-border);
+    background-color: var(--card-bg-soft);
+}
+
+.dashboard .card-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    opacity: 0.9;
+}
+
+.dashboard .display-6 {
+    letter-spacing: -0.02em;
+}
+
+/* =========================================================
+   Insight levels (semantic, subtle)
+   ========================================================= */
+
+.dashboard .insight {
+    padding: 1rem;
+    border-radius: var(--card-radius);
+    border: 1px solid var(--card-border);
+    background-color: var(--card-bg-soft);
+}
+
+/* Comfortable */
+.dashboard .insight--good {
+    border-left: 4px solid rgba(15, 118, 110, 0.6);
+}
+
+/* Neutral */
+.dashboard .insight--neutral {
+    border-left: 4px solid rgba(148, 163, 184, 0.5);
+}
+
+/* Alert */
+.dashboard .insight--alert {
+    border-left: 4px solid rgba(234, 179, 8, 0.6);
+}
+
+/* Stressful */
+.dashboard .insight--bad {
+    border-left: 4px solid rgba(239, 68, 68, 0.6);
+}
+
+
+
+/* =========================================================
+   Lists
+   ========================================================= */
+
+.dashboard .list-group-item {
+    border-color: var(--card-border);
+    background-color: transparent;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+
+/* =========================================================
+   Utilities (dashboard-specific)
+   ========================================================= */
+
+.dashboard-muted {
+    color: var(--bs-secondary-color);
+}
+
+.dashboard-emphasis {
+    color: var(--bs-body-color-emphasis);
+    font-weight: 600;
+}
