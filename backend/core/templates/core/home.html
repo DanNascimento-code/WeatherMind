@@ -50,41 +50,45 @@
     </div>
 
     <div class="card">
-        <div style="display: flex; justify-content: space-between; gap: 2rem; align-items: center;">
-            <div>
-                <div class="card-title">
-                    {{ weather.city }}
-                </div>
-                <div class="card-value">
-                    {{ weather.temperature }}°C
-                </div>
-                <div class="text-secondary">
-                    Sensação térmica: {{ weather.feels_like }}°C
-                </div>
-                <div class="text-secondary">
-                    Umidade: {{ weather.humidity }}%
-                </div>
-            </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center gap-4">
+                <div>
+                    <div class="card-title mb-1">
+                        {{ weather.city }}
+                    </div>
 
-            {% if weather.condition %}
-            <div class="text-secondary">
-                {{ weather.condition }}
+                    <div class="card-value">
+                        {{ weather.temperature }}°C
+                    </div>
+
+                    <div class="text-secondary">
+                        Sensação térmica: {{ weather.feels_like }}°C
+                    </div>
+
+                    <div class="text-secondary">
+                        Umidade: {{ weather.humidity }}%
+                    </div>
+                </div>
+
+                {% if weather.condition %}
+                <div class="text-secondary text-end">
+                    {{ weather.condition }}
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
 
-        <!-- Dashboard navigation CTA -->
-        <div class="card-footer" style="margin-top: 1.5rem;">
-            <a
-                href="{% url 'dashboard:index' %}"
-                class="btn-secondary"
-            >
-                Ir para meu dashboard →
-            </a>
-        </div>
+        <div class="card-footer d-flex justify-content-end">
+            <form action="{% url 'dashboard:index' %}" method="get">
+                <button type="submit" class="btn-accent px-4">
+                    Ver análise completa
+                </button>
+            </form>
+       </div>
     </div>
 </section>
 {% endif %}
+
 
 <!-- ========================= -->
 <!-- Historical Chart Section -->

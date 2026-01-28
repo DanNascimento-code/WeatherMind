@@ -12,3 +12,8 @@ header {
 main {
     padding: 2rem;
 }
+
+.wm-btn {
+    border-radius: 0.75rem;
+}
+
