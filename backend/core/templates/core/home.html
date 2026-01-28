@@ -18,12 +18,13 @@
     </div>
 
     <div class="card">
-        <form method="get">
+        <form method="get" class="city-form">
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <input
                     type="text"
                     name="city"
                     placeholder="Digite o nome da cidade"
+                    value="{{ request.GET.city }}"
                     required
                 >
                 <button type="submit" class="btn-accent">
@@ -71,6 +72,16 @@
             </div>
             {% endif %}
         </div>
+
+        <!-- Dashboard navigation CTA -->
+        <div class="card-footer" style="margin-top: 1.5rem;">
+            <a
+                href="{% url 'dashboard:index' %}"
+                class="btn-secondary"
+            >
+                Ir para meu dashboard →
+            </a>
+        </div>
     </div>
 </section>
 {% endif %}
@@ -109,8 +120,7 @@
                     {{ record.condition }}
                 </div>
             </div>
-            {% endfor %}
-        </ul>
+        {% endfor %}
     </div>
 
     <div class="chart-container" data-loading="true">
